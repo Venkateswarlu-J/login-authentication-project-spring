@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Forget Password-Project</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .forget-container {
+            background: white;
+            width: 350px;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        input[type="text"],
+        input[type="password"],
+         input[type="email"]{
+            width: 90%;
+            padding: 12px;
+            margin: 10px ;
+            border: 1px solid #aaa;
+            border-radius: 6px;
+            font-size: 16px;
+        }
+
+        button {
+            transition:transform 0.3s ease;
+            width: 90%;
+            padding: 12px;
+            background: #007BFF;
+            border: none;
+            border-radius: 6px;
+            font-size: 18px;
+            color: white;
+            cursor: pointer;
+            margin: 10px 20px 20px 15px;
+        }
+
+        button:hover{
+            transform:scale(1.05);
+        }
+
+        .otp-val{
+            display:inline;
+            display:flex;
+        }
+    </style>
+</head>
+<body>
+<div id="header-container"></div>
+<script src="js/header.js"></script>
+<script>
+    fetch('/header.html')
+    .then(res=>res.text())
+    .then(data=>{
+    document.getElementById("header-container").innerHTML=data;
+    secAuth(true);
+    });
+</script>
+<div class="forget-container">
+    <h2>Forget Password</h2>
+    <form method=post>
+        <input type="email" name="email" id="email" placeholder="Enter the email" required><br>
+        <div class="otp-val">
+            <input type="text" style="display:none" name="otp" id="otp" placeholder="Enter the OTP">
+            <button name="button" formaction="http://localhost:9090/validate-OTP" id="validate" style="display:none">Verify OTP</button>
+            <span id="incorrectOTP" style="display:none;color:red">OTP is Not valid</span>
+        </div>
+
+        <span id="userNotFound" style="display:none;color:red">User does not exist</span>
+        <button type="submit" formaction="http://localhost:9090/forget-password" name="submit" id="submit">Send OTP</button>
+    </form>
+</div>
+<script>
+    const param=new URLSearchParams(window.location.search);
+    if(param.get("notFound")){
+        document.getElementById("userNotFound").style.display="block";
+    }
+
+    fetch('/getMessage')
+            .then(res=>res.text())
+                .then(msg=>{
+                    if(msg){
+                    alert(msg);
+                    }
+                }).catch(err => console.error(err));
+
+    if(param.get("otp")){
+    //To Get the Gmail
+        fetch('/getEmail')
+            .then(res=>res.text())
+                .then(email=>{
+                    if(email){
+                    document.getElementById("email").value=email;
+                    }
+                }).catch(err => console.error(err));
+
+        document.getElementById("otp").style.display="block";
+        document.getElementById("validate").style.display="block";
+        document.getElementById("email").readOnly=true;
+        document.getElementById("submit").innerText="Resend OTP";
+    }
+    if(param.get("expire-otp")||param.get("wrong-otp")){
+    document.getElementById("incorrectOTP").style.display="block";
+    }
+
+</script>
+</body>
+</html>

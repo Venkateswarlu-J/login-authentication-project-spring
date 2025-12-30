@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Reset Password</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .reset-container {
+            background: white;
+            width: 350px;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        input[type="text"],
+        input[type="password"],
+         input[type="email"]{
+            width: 90%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #aaa;
+            border-radius: 6px;
+            font-size: 16px;
+        }
+
+        button {
+            width: 90%;
+            padding: 12px;
+            background: #007BFF;
+            border: none;
+            border-radius: 6px;
+            font-size: 18px;
+            color: white;
+            cursor: pointer;
+            margin: 10px;
+        }
+
+        #submit{
+        background-color:#0056b3;
+        justify-content:center;
+        transition:transform 0.3s ease;
+        margin-left:1rem;
+        }
+
+        #submit:hover{
+        transform:scale(1.05);
+        }
+        #error{
+        margin:10px;
+        }
+    </style>
+</head>
+<body>
+<div id="header-container"></div>
+<script src="js/header.js"></script>
+<script>
+    fetch('/header.html')
+    .then(res=>res.text())
+    .then(data=>{
+    document.getElementById("header-container").innerHTML=data;
+    fetch('/session-status').
+    then(res=>res.json()).
+    then(val=>{
+    secAuth(val);
+    });
+    });
+</script>
+
+<div class="reset-container">
+<h2>Create New Password</h2>
+<form action="http://localhost:9090/reset-password" method=post>
+    <input type="password" name="newPass" id="newPass" placeholder="Enter new password"><br>
+    <input type="checkbox" id="showPass">Show Password<br>
+    <span id="error" style="display:none;color:red">Password should be At least 8 chars</span>
+    <button type="submit" name="confirm" id="confirm" >Confirm</button>
+</form>
+</div>
+<script>
+
+
+    const newPassword=document.getElementById("newPass");
+    const resetBut=document.getElementById("confirm");
+
+    document.getElementById("showPass").addEventListener("change",function(){
+        newPassword.type=this.checked? "text" : "password";
+        });
+
+    let passValidate=false;
+    function validate(){
+        resetBut.disabled=!(passValidate);
+    }
+    newPassword.addEventListener("blur",function(){
+        if(newPassword.value.trim()!=""&&newPassword.value.length<8){
+            document.getElementById("error").style.display="block";
+            passValidate=false;
+        }
+        else{
+            passValidate=true;
+        }
+        validate();
+    });
+</script>
+</body>
+</html>

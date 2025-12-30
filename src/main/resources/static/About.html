@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>About</title>
+    <style>
+
+        .about-section {
+  padding: 80px 100px;
+  background: #f8fafc;
+  color: #0f172a;
+}
+
+.about-section h2 {
+  font-size: 32px;
+  margin-bottom: 30px;
+  color: #020617;
+}
+
+.about-section p {
+  font-size: 17px;
+  line-height: 1.7;
+  margin-bottom: 18px;
+  color: #334155;
+}
+
+.about-section .note {
+  margin-top: 30px;
+  font-style: italic;
+  color: #475569;
+}
+
+    </style>
+</head>
+<body>
+<div id="header-container"></div>
+<script src="js/header.js"></script>
+<script>
+    fetch('/header.html')
+    .then(res=>res.text())
+    .then(data=>{
+    document.getElementById("header-container").innerHTML=data;
+    secAuth(true);
+    });
+</script><br>
+<section id="about" class="about-section">
+    <h2>About This Project</h2>
+
+    <p>
+        This project is a simple <strong>Spring Boot practice application</strong>
+        developed to strengthen my understanding of backend development concepts.
+    </p>
+
+    <p>
+        The main focus of this project is to learn how <strong>Spring Boot</strong>
+        manages application flow using <strong>controllers</strong>,
+        <strong>beans</strong>, and <strong>dependency injection</strong>.
+    </p>
+
+    <p>
+        It demonstrates core backend features such as user authentication,
+        session management, request handling, and navigation control
+        in a real web application scenario.
+    </p>
+
+
+    <p class="note">
+        The goal of this project is learning by building — focusing on backend logic,
+        application structure, and understanding how Spring Boot works internally.
+    </p>
+</section>
+
+</body>
+</html>

@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login-Project</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .login-container {
+            background: white;
+            width: 400px;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        input[type="text"],
+        input[type="password"],
+         input[type="email"]{
+            width: 90%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #aaa;
+            border-radius: 6px;
+            font-size: 16px;
+        }
+
+        button {
+            width: 90%;
+            padding: 12px;
+            background: #007BFF;
+            border: none;
+            border-radius: 6px;
+            font-size: 18px;
+            color: white;
+            cursor: pointer;
+            margin: 10px;
+            transition:transform 0.3s ease;
+        }
+
+        #login{
+            background-color:#0056b3;
+            justify-content:center;
+        }
+
+        #login:hover{
+            transform:scale(1.05);
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        .footer a,
+         .error a{
+            text-decoration: none;
+            color: #007BFF;
+        }
+
+        .error{
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            gap:5rem;
+            margin:10px;
+        }
+
+    </style>
+
+</head>
+
+<body>
+<div id="header-container"></div>
+<script src="js/header.js"></script>
+<script>
+    fetch('/header.html')
+    .then(res=>res.text())
+    .then(data=>{
+    document.getElementById("header-container").innerHTML=data;
+    secAuth(false);
+    });
+</script><br>
+<div class="login-container">
+    <h2>User Login</h2>
+
+    <form action="http://localhost:9090/Login" method="post">
+        <input type="text" id="emailOrName" name="identity" placeholder="Enter Gmail or username" required>
+        <input type="password" id="password" name="pass" placeholder="Enter Password" required><br>
+        <input type="checkbox" id="showPass">Show Password
+        <div class="error">
+            <span id="error" style="display:none;color:red">Invalid Credentials!</span>
+            <a id="forget" style="display:none" href="ForgetPass">forget password</a>
+        </div>
+        <button type="submit" id="login">Login</button>
+    </form>
+    <script>
+
+        //To handle the forget password option and showing the incorrect credentials
+        const params=new URLSearchParams(window.location.search);
+        console.log(params.get("error"));
+        if(params.get("error")){
+            document.getElementById("error").style.display="block";
+            document.getElementById("forget").style.display="block";
+
+        }
+
+        document.getElementById("showPass").addEventListener("change",function(){
+            password.type = this.checked ? "text" : "password";
+        });
+
+        fetch('/getMessage')
+            .then(res=>res.text())
+                .then(msg => {
+                if(msg){
+                    alert(msg);
+                    }
+                }).catch(err=>console.log(err));
+
+    </script>
+
+        <div class="footer">
+            <p>Don't have an account? <a href="Register.html">Sign up</a></p>
+        </div>
+
+    </div>
+    </body>
+    </html>

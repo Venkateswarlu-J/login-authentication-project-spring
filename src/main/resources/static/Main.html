@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SecAuth</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            margin: 0;
+            background-color:pink;
+             background: linear-gradient(135deg, #f8fafc, #e2e8f0);
+             color:#0f172a;
+            #background:url("https://i.pinimg.com/736x/4c/4e/e3/4c4ee31057582166f76e3695b3fdbfa5.jpg");
+            background-repeat:no-repeat;
+            background-size:cover;
+            background-position:center;
+        }
+
+        .userInterface{
+            display:flex;
+            flex-direction:row;
+            min-height: calc(100vh - 70px);
+            justify-content:center;
+            align-items:center;
+        }
+
+        .image{
+            margin:20px;
+            border:20x solid black;
+            width:50%;
+        }
+
+
+        #quickPlay{
+            margin:20px;
+            border:4px strike black;
+            padding:20px 20px;
+            flex:1;
+            border-radius:50px;
+        }
+    </style>
+</head>
+<body>
+<div id="header-container"></div>
+<script src="js/header.js"></script>
+<script>
+    fetch('/header.html')
+    .then(res=>res.text())
+    .then(data=>{
+    document.getElementById("header-container").innerHTML=data;
+    secAuth(true);
+    return fetch('/username');
+    }).then(res => res.text())
+      .then(name => {
+          document.getElementById("userName").innerText = name;
+          document.getElementById("user").innerText = name;
+      });
+
+</script>
+<div class="userInterface">
+    <div class="image">
+        <h1>“Built with care, just for learning.”</h1>
+
+    </div>
+    <div class="greeting">
+        <h1>Welcome, "<span id="userName"></span>"</h1>
+       <!-- <button id="quickPlay">Quick play!</button>-->
+    </div>
+</div>
+</body>
+</html>

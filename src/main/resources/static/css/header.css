@@ -1,0 +1,108 @@
+* {
+margin: 0;
+padding: 0;
+box-sizing: border-box;
+font-family: Arial, sans-serif;
+}
+
+.navbar {
+height: 60px;
+background: #1e1e2f;
+color: white;
+display: flex;
+align-items: center;
+justify-content: space-between;
+padding: 0 30px;
+}
+
+/* Logo */
+.logo {
+font-size: 22px;
+font-weight: bold;
+cursor: pointer;
+}
+
+.logo:hover {
+color: #4caf50;
+}
+
+/* Nav Links */
+.nav-links a {
+margin: 0 15px;
+color: white;
+text-decoration: none;
+font-size: 15px;
+}
+
+.nav-links a:hover {
+border-bottom: 2px solid #4caf50;
+}
+
+/* Profile */
+.profile {
+position: relative;
+cursor: pointer;
+}
+
+.profile span {
+margin-right: 5px;
+}
+
+.arrow {
+font-size: 12px;
+}
+
+/* Dropdown */
+.profile-menu {
+display: none;
+position: absolute;
+right: 0;
+top: 40px;
+background: white;
+color: black;
+width: 180px;
+border-radius: 6px;
+box-shadow: 0 6px 15px rgba(0,0,0,0.25);
+overflow: hidden;
+z-index: 100;
+}
+
+.profile-menu a {
+display: block;
+padding: 12px;
+text-decoration: none;
+color: black;
+font-size: 14px;
+}
+
+.profile-menu a:hover {
+background: #f2f2f2;
+}
+
+.logout {
+color: red;
+font-weight: bold;
+}
+
+/* Hide elements by default */
+.nav-links,
+.profile {
+display: none;
+}
+
+
+#header-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+}
+
+body {
+    padding-top: 60px; /* adjust to header height */
+}
+
+#showPass{
+      margin:10px;
+}

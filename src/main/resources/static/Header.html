@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Header</title>
+    <link rel="stylesheet" href="css/header.css">
+    <script src="js/header.js"></script>
+    <script>
+        fetch('/username')
+            .then(res=>res.text())
+                .then(msg=>{
+                    document.getElementById("user").innerText=msg;
+        });
+    </script>
+</head>
+<body>
+
+<header class="navbar">
+    <div class="logo" onclick="goHome()">
+        SecureAuth
+    </div>
+
+    <nav class="nav-links" id="navLinks">
+        <a href="/Main">Home</a>
+        <a href="/FeedBack">Feedback</a>
+        <a href="/About">About</a>
+    </nav>
+
+    <div class="profile" id="profileBox" onclick="toggleProfile()">
+        <span id="user">Jv</span>
+        <span class="arrow">▼</span>
+
+        <div class="profile-menu" id="profileMenu">
+            <a href="ForgetPass.html">Change Password</a>
+            <a href="/Logout" class="logout">Logout</a>
+        </div>
+    </div>
+</header>
+
+</body>
+</html>

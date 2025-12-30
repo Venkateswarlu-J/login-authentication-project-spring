@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration-Project</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        input:focus{
+            border-color:#007BFF;
+        }
+
+        .registration-container {
+            background: white;
+            width: 400px;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        input[type="text"],
+        input[type="password"],
+         input[type="email"]{
+            width: 90%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #aaa;
+            border-radius: 6px;
+            font-size: 16px;
+        }
+
+        button {
+            transition:transform 0.3s ease;
+            width: 90%;
+            padding: 12px;
+            background: #007BFF;
+            border: none;
+            border-radius: 6px;
+            font-size: 18px;
+            color: white;
+            cursor: pointer;
+            margin: 10px;
+        }
+
+        button:hover:not(:disabled) {
+            background: #0056b3;
+        }
+        #register:disabled{
+            background-color:#999999;
+            color:#ffffff;
+            cursor:not-allowed;
+        }
+        #register{
+            background-color:#0056b3;
+            margin:10px;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        .footer a {
+            text-decoration: none;
+            color: #007BFF;
+        }
+    </style>
+
+</head>
+
+<body>
+<div id="header-container"></div>
+<script src="js/header.js"></script>
+<script>
+    fetch('/header.html')
+    .then(res=>res.text())
+    .then(data=>{
+    document.getElementById("header-container").innerHTML=data;
+    secAuth(false);
+    });
+</script>
+<div class="registration-container">
+    <h2>User Registration</h2>
+
+    <form action="http://localhost:9090/Register" method="post">
+        <span id="userExisted" style="display:none;color:red">User Already Existed .Please Login!</span>
+        <input type="text" id="username" name="uName" placeholder="Enter Username" required>
+        <small id="userError" style="color:red;"></small>
+        <input type="email" id="email" name="gmail" placeholder="Enter Gmail" required>
+        <small id="emailError" style="color:red;"></small>
+        <input type="password" id="password" name="password" placeholder="Enter Password" required>
+        <small id="passwordError" style="color:red;"></small><br>
+        <input type="password" id="cPassword" name="cPassword" placeholder="Confirm Password" required><br>
+        <input type="checkbox" id="showPass">Show Password<br>
+        <small id="cPassError" style="color:red;"></small>
+        <button type="submit" id="register"disabled>Register</button>
+    </form>
+    <script>
+        const params=new URLSearchParams(window.location.search);
+        if(params.get("exist")){
+            document.getElementById("userExisted").style.display="block";
+        }
+        if(params.get("userName")){
+            document.getElementById("userError").innerText="Username is already existed!";
+        }
+
+
+        const username=document.getElementById("username");
+        //const phoneNumber=document.getElementById("phone");
+        const emailVal=document.getElementById("email");
+        const password=document.getElementById("password");
+        const cPassWord=document.getElementById("cPassword");
+        const regBut=document.getElementById("register");
+
+        let usernameValidate=false;
+        //let phoneValidate=false;
+        let emailValidate=false;
+        let passwordValidate=false;
+        let cPassValidate=false;
+
+        document.getElementById("showPass").addEventListener("change",function(){
+            password.type = this.checked ? "text" : "password";//text is for the visible and password is to hidden
+            cPassword.type=this.checked ? "text" : "password";
+        });
+
+        function validate(){
+            regBut.disabled=!(usernameValidate&&emailValidate&&passwordValidate&&cPassValidate);
+        }
+
+        //Username validation
+        username.addEventListener("blur",async function(){
+            const userPattern=/^[A-Za-z][A-Za-z0-9_]{2,}$/;
+            if(userPattern.test(username.value)){
+                document.getElementById("userError").innerText="";
+                usernameValidate=true;
+            }
+            else{
+                document.getElementById("userError").innerText="Username should start with letter (at least 3 chars)";
+                usernameValidate=false;
+            }
+            validate();
+        });
+
+        //Password validation
+        password.addEventListener("blur",async function(){
+            if(password.value.trim()!=""&&password.value.length<8){
+                document.getElementById("passwordError").innerText="Password length should be at least 8";
+                passwordValidate=false;
+            }
+            else{
+                document.getElementById("passwordError").innerText="";
+                passwordValidate=true;
+            }
+            validate();
+        });
+
+        //Confirm password validation
+        cPassWord.addEventListener("input",async function(){
+            if(cPassWord.value.trim()!=""&&password.value!=cPassWord.value){
+                document.getElementById("cPassError").innerText="Password not Matched";
+                cPassValidate=false;
+            }
+            else{
+                document.getElementById("cPassError").innerText="";
+                cPassValidate=true;
+            }
+            validate();
+        });
+
+        //Phone Validator
+        /*phoneNumber.addEventListener("blur",async function(){
+            const pat=/^[0-9]{10}$/;
+            if(phoneNumber.value.trim()!=""&&!pat.test(phoneNumber.value)){
+                document.getElementById("phoneError").innerText="Not Valid";
+                phoneValidate=false;
+            }
+            else{
+                document.getElementById("phoneError").innerText="";
+                phoneValidate=true;
+            }
+            validate();
+        });*/
+
+        //Email validation
+        emailVal.addEventListener("blur",async function(){
+            const pattern=/^[a-zA-Z0-9+%_]+@gmail\.com$/;
+            if(emailVal.value.trim().toLowerCase()!=""&&!pattern.test(emailVal.value)){
+                document.getElementById("emailError").innerText="Provide valid email";
+                emailValidate=false;
+            }
+            else{
+                document.getElementById("emailError").innerText="";
+                emailValidate=true;
+            }
+            validate();
+        });
+
+
+    </script>
+
+
+    <div class="footer">
+        <p>Already have an account? <a href="Login">Sign in</a></p>
+    </div>
+</div>
+</body>
+</html>
