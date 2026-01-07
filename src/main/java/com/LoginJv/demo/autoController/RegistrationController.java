@@ -42,6 +42,9 @@ public class RegistrationController {
         user.setGmail(email);
         service.register(user);
 //        session.invalidate();
+        session.removeAttribute("email");
+        session.removeAttribute("newOTP");
+        session.removeAttribute("otpExpiry");
         session.setAttribute("success","Account created successfully!!");
         return "redirect:/Login?success=true";
     }
