@@ -24,7 +24,7 @@ public class PasswordHandler {
 
     @GetMapping("/ForgetPass")
     public String forget_pass(HttpSession session){
-        return session.getAttribute("userName")!=null?"ResetPass.html":"redirect:/Login";
+        return session.getAttribute("userName")!=null?"ForgetPass.html":"redirect:/Login";
     }
 
     @PostMapping("reset-password")

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login-Project</title>
+    <title>Verification</title>
 
     <style>
         body {
@@ -16,12 +16,15 @@
             margin: 0;
         }
 
-        .login-container {
+        .verification-container {
             background: white;
             width: 400px;
             padding: 25px;
             border-radius: 10px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        .verify-container{
+            width:100%;
         }
 
         h2 {
@@ -30,9 +33,8 @@
             color: #333;
         }
 
-        input[type="text"],
         input[type="password"],
-         input[type="email"]{
+        input[type="text"]{
             width: 90%;
             padding: 12px;
             margin: 10px 0;
@@ -54,32 +56,26 @@
             transition:transform 0.3s ease;
         }
 
-        #login{
+        #create{
             background-color:#0056b3;
             justify-content:center;
         }
 
-        #login:hover{
+        button:hover:not(:disabled) {
+            background: #0056b3;
+        }
+        #createBut:disabled{
+            background-color:#999999;
+            color:#ffffff;
+            cursor:not-allowed;
+        }
+
+        #create:hover{
             transform:scale(1.05);
         }
-
-        .footer {
-            text-align: center;
-            margin-top: 15px;
-        }
-
-        .footer a,
-         .error a{
-            text-decoration: none;
-            color: #007BFF;
-        }
-
-        .error{
+        .flex{
             display:flex;
-            justify-content:center;
-            align-items:center;
-            gap:5rem;
-            margin:10px;
+            flex-direction:row;
         }
 
     </style>
@@ -97,32 +93,29 @@
     secAuth(false);
     });
 </script><br>
-<div class="login-container">
-    <h2>User Login</h2>
+<div class="verification-container">
+    <h2>OTP Verification</h2>
 
-    <form action="http://localhost:9090/Login" method="post">
-        <input type="text" id="emailOrName" name="identity" placeholder="Enter Gmail or username" required>
-        <input type="password" id="password" name="pass" placeholder="Enter Password" required><br>
-        <input type="checkbox" id="showPass">Show Password
-        <div class="error">
-            <span id="error" style="display:none;color:red">Invalid Credentials!</span>
-            <a id="forget" style="display:none" href="ForgetPass">forget password</a>
+    <form action="http://localhost:9090/createAcc" method="post">
+        <div class="flex">
+        <input type="text" id="otpLab" name="otpLab" placeholder="Enter OTP" required>
+        <div class="resend">
+            <button type="submit" id="resend" formaction="http://localhost:9090/generateOTP" formmethod="get" name="resend">Resend OTP</button>
         </div>
-        <button type="submit" id="login">Login</button>
+        </div>
+        <small id="otpError" style="color:red;"></small><br>
+        <button type="submit" id="createBut">Verify</button>
     </form>
     <script>
 
-        //To handle the forget password option and showing the incorrect credentials
+        //To handle option and showing the incorrect otp
         const params=new URLSearchParams(window.location.search);
-        console.log(params.get("error"));
-        if(params.get("error")){
-            document.getElementById("error").style.display="block";
-            document.getElementById("forget").style.display="block";
-        }
+       // console.log(params.get("error"));
 
-        document.getElementById("showPass").addEventListener("change",function(){
-            password.type = this.checked ? "text" : "password";
-        });
+        if(params.get("invalid")){
+            document.getElementById("otpError").style.display=block;
+            document.getElementById("otpError").innerText="Invalid OTP";
+        }
 
         fetch('/getMessage')
             .then(res=>res.text())
@@ -134,10 +127,6 @@
 
     </script>
 
-        <div class="footer">
-            <p>Don't have an account? <a href="Register.html">Sign up</a></p>
-        </div>
-
-    </div>
-    </body>
-    </html>
+</div>
+</body>
+</html>

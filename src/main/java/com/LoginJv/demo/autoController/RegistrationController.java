@@ -5,10 +5,7 @@ import com.LoginJv.demo.userService.LoginService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 public class RegistrationController {
@@ -25,6 +22,31 @@ public class RegistrationController {
         return "Register.html";
     }
 
+    @PostMapping("/createAcc")
+    public String createAccount(HttpSession session, @RequestParam String otpLab) {
+        String email = (String) session.getAttribute("verifiedEmail");
+        String otp = (String) session.getAttribute("newOTP");
+        Long expiry = (Long) session.getAttribute("otpExpiry");
+        if (email == null || otp == null || expiry == null) {
+            return "redirect:/Register";
+        }
+        if (expiry < System.currentTimeMillis()) {
+            return "redirect:/otpVerification?expired=true";
+        }
+        if (!otp.equals(otpLab)) {
+            return "redirect:/otpVerification?invalid=true";
+        }
+        User user = new User();
+        user.setuName((String) session.getAttribute("userName"));
+        user.setPassword((String) session.getAttribute("password"));
+        user.setGmail(email);
+        service.register(user);
+//        session.invalidate();
+        session.setAttribute("success","Account created successfully!!");
+        return "redirect:/Login?success=true";
+    }
+
+
     @PostMapping("/Register")
     public String toRegister(@ModelAttribute User user, HttpSession session){
         if(service.find(user.getGmail())!=null){
@@ -33,9 +55,10 @@ public class RegistrationController {
         if(service.find(user.getuName())!=null){
             return "redirect:/Register?userName=true";
         }
-        session.setAttribute("success","Successfully Registered!");
-        service.register(user);
-        return "redirect:/Login";
+        session.setAttribute("verifiedEmail",user.getGmail());
+        session.setAttribute("userName",user.getuName());
+        session.setAttribute("password",user.getPassword());
+        return "redirect:/generateOTP";
     }
 
     @GetMapping("/getMessage")
@@ -46,4 +69,5 @@ public class RegistrationController {
 //        System.out.println(msg);
         return msg!=null?msg:"";
     }
+
 }
